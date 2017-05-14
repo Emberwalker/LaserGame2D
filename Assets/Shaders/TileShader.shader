@@ -1,4 +1,6 @@
-﻿// Imported from http://schemingdeveloper.com/2014/10/15/tiling-sprites-unity/
+﻿// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
+
+// Imported from http://schemingdeveloper.com/2014/10/15/tiling-sprites-unity/
 Shader "Sprites/Tile"
 {
 	Properties
@@ -55,7 +57,7 @@ Shader "Sprites/Tile"
 			v2f vert(appdata_t IN)
 			{
 				v2f OUT;
-				OUT.vertex = mul(UNITY_MATRIX_MVP, IN.vertex);
+				OUT.vertex = UnityObjectToClipPos(IN.vertex);
 				OUT.texcoord = IN.texcoord * half2(RepeatX, RepeatY);
 				OUT.color = IN.color * _Color;
 				#ifdef PIXELSNAP_ON
