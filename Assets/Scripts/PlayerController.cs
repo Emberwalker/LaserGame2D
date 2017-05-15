@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.Assertions;
 
 public class PlayerController : MonoBehaviour {
@@ -8,6 +9,9 @@ public class PlayerController : MonoBehaviour {
 	public GameController.PlayerTeam team;
 
 	public float speed;
+
+	public GameObject progressBarBase;
+	public GameObject progressBar;
 
 	private string horizontalAxis;
 	private string verticalAxis;
@@ -77,9 +81,14 @@ public class PlayerController : MonoBehaviour {
 		if (controller.GetTowerOwner(tower) != team) {
 			// Enemy/Neutral tower.
 			captureProgress += 1;
+			progressBarBase.SetActive (true);
+			progressBarBase.transform.position = new Vector3(tower.transform.position.x, tower.transform.position.y - 2, 0);
+			progressBar.GetComponent<ProgressBar> ().SetProgress((captureProgress / (float)controller.captureTime) * 100f);
+
 			if (captureProgress >= controller.captureTime) {
 				captureProgress = 0;
 				controller.TowerCaptured (tower, team);
+				progressBarBase.SetActive (false);
 			}
 		} else {
 			// Friendly - change direction.
@@ -108,5 +117,6 @@ public class PlayerController : MonoBehaviour {
 	void OnTriggerExit2D (Collider2D other) {
 		currentCollision = null;
 		captureProgress = 0;
+		progressBarBase.SetActive (false);
 	}
 }

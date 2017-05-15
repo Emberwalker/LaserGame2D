@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 /*
  * Main game state controller.
@@ -46,6 +47,9 @@ public class GameController : MonoBehaviour {
 	public int gridRows;
 	public int gridCols;
 	public int captureTime;
+
+	public GameObject winPanel;
+	public GameObject winText;
 
 	private PlayGridLoc[,] playGrid;
 	private EmitterController[] emittersRed;
@@ -161,8 +165,18 @@ public class GameController : MonoBehaviour {
 	}
 
 	private void EndOfGame(PlayerTeam winner) {
-		// TODO
 		Debug.Log ("WIN: " + winner.ToString ());
+		foreach (GameObject player in GameObject.FindGameObjectsWithTag("Player")) {
+			player.SetActive (false);
+		}
+		winPanel.SetActive (true);
+		Text txt = winText.GetComponent<Text> ();
+		txt.text = winner.ToString () + " wins";
+		if (winner == PlayerTeam.Red) {
+			txt.color = RED_COLOR;
+		} else {
+			txt.color = BLUE_COLOR;
+		}
 	}
 
 	public void RegisterTower (TowerController tower, int x, int y) {
